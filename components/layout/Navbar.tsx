@@ -6,6 +6,7 @@ import { Train, Search, Heart } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/utils/cn';
 import { useFavoritesStore } from '@/store/favorites';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 export function Navbar() {
   const pathname = usePathname();
@@ -19,13 +20,12 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full px-4 pt-4 pb-2">
       <div className="glass-panel mx-auto flex max-w-7xl items-center justify-between rounded-2xl px-6 py-3 shadow-glass">
-        {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-rail-blue text-white shadow-glow transition-transform group-hover:scale-105">
             <Train className="h-5 w-5" />
           </div>
           <div>
-            <span className="text-lg font-extrabold tracking-tight text-slate-900 dark:text-white">
+            <span className="text-lg font-extrabold tracking-tight text-foreground">
               Rail<span className="text-rail-blue">Gaadi</span>
             </span>
             <span className="hidden sm:inline-block ml-2 rounded-full bg-rail-blue/10 px-2 py-0.5 font-mono text-[10px] font-bold text-rail-blue">
@@ -34,8 +34,8 @@ export function Navbar() {
           </div>
         </Link>
 
-        {/* Navigation Links */}
         <nav className="flex items-center gap-1 sm:gap-2">
+          <ThemeToggle />
           {links.map(({ href, label, icon: Icon, exact }) => {
             const isActive = href.startsWith('/?')
               ? pathname === '/'
@@ -49,10 +49,10 @@ export function Navbar() {
                 key={href}
                 href={href}
                 className={cn(
-                  'relative flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold transition-all',
+                  'relative flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold transition-colors duration-200',
                   isActive
-                    ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-sm'
-                    : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'
+                    ? 'bg-foreground text-background shadow-sm'
+                    : 'text-muted-foreground hover:bg-foreground/5 hover:text-foreground'
                 )}
               >
                 <Icon className="h-3.5 w-3.5" />

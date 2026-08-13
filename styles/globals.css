@@ -5,9 +5,14 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    height: 100%;
+  }
+
   :root {
+    color-scheme: light;
     --background: 210 40% 98%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 222.2 47% 11%;
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -38,7 +43,8 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    color-scheme: dark;
+    --background: 222 47% 6%;
     --foreground: 210 40% 98%;
 
     --card: 222.2 84% 7%;
@@ -93,6 +99,30 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+/* Circle-spread theme transition */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+}
+
+@keyframes circle-spread {
+  from {
+    clip-path: circle(0% at var(--theme-x, 90%) var(--theme-y, 8%));
+  }
+  to {
+    clip-path: circle(150% at var(--theme-x, 90%) var(--theme-y, 8%));
+  }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -107,4 +137,12 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(156, 163, 175, 0.5);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.28);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.45);
 }

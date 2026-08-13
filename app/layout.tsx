@@ -3,9 +3,11 @@ import { Suspense } from 'react';
 import { Inter } from 'next/font/google';
 import '@/styles/globals.css';
 import QueryProvider from '@/providers/query-provider';
+import { ThemeProvider } from '@/providers/theme-provider';
 import { Navbar } from '@/components/layout/Navbar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { CinematicFooter } from '@/components/ui/motion-footer';
+import { THEME_INIT_SCRIPT } from '@/lib/theme';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
@@ -46,25 +48,26 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <link rel="preconnect" href="https://api.railradar.in" />
         <link rel="preconnect" href="https://api.maptiler.com" />
         <link rel="preconnect" href="https://api.openweathermap.org" />
       </head>
-      <body
-        className={`${inter.className} min-h-full flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100`}
-      >
-        <QueryProvider>
-          <Navbar />
-          <main className="flex-1 px-4 py-6 max-w-7xl mx-auto w-full pb-24 md:pb-6">
-            {children}
-          </main>
-          <CinematicFooter />
-          <Suspense fallback={null}>
-            <BottomNav />
-          </Suspense>
-        </QueryProvider>
+      <body className={`${inter.className} min-h-full flex flex-col bg-background text-foreground`}>
+        <ThemeProvider>
+          <QueryProvider>
+            <Navbar />
+            <main className="flex-1 px-4 py-6 max-w-7xl mx-auto w-full pb-24 md:pb-6">
+              {children}
+            </main>
+            <CinematicFooter />
+            <Suspense fallback={null}>
+              <BottomNav />
+            </Suspense>
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
