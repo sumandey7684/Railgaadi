@@ -408,7 +408,14 @@ export function CinematicFooter({ className }: { className?: string }) {
           <div className="flex flex-col gap-1 text-xs text-muted-foreground sm:flex-row sm:items-center sm:gap-3">
             <span>© 2026 RailGaadi</span>
             <span className="hidden h-1 w-1 rounded-full bg-border sm:inline-block" aria-hidden />
-            <span>Built for better journeys.</span>
+            <a
+              href="https://github.com/sumandey7684"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+            >
+              Built by Suman Dey
+            </a>
           </div>
 
           <button
