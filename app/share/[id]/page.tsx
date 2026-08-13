@@ -76,7 +76,7 @@ export default function ShareJourneyPage({ params }: { params: { id: string } })
 
   return (
     <div className="space-y-6 py-4">
-      <div className="glass-panel flex items-center justify-between gap-3 rounded-2xl px-6 py-3 border border-rail-blue/30">
+      <div className="flex items-center justify-between gap-3 rounded-2xl border border-rail-blue/25 bg-rail-blue/5 px-6 py-3">
         <div className="flex items-center gap-2 text-xs font-semibold text-rail-blue min-w-0">
           <ShieldCheck className="h-4 w-4 flex-shrink-0" />
           <span className="truncate">Public Shared Live Journey Stream</span>
@@ -86,7 +86,7 @@ export default function ShareJourneyPage({ params }: { params: { id: string } })
           <AutoRefreshToggle compact />
           <Link
             href="/"
-            className="text-xs font-bold text-slate-800 dark:text-white hover:text-rail-blue transition-colors"
+            className="text-xs font-bold text-foreground hover:text-rail-blue transition-colors"
           >
             Track another train →
           </Link>
@@ -94,26 +94,26 @@ export default function ShareJourneyPage({ params }: { params: { id: string } })
       </div>
 
       {dataSource === 'fallback' && (
-        <div className="glass-panel flex items-center gap-3 rounded-2xl p-4 border border-amber-500/20">
+        <div className="flex items-center gap-3 rounded-2xl border border-amber-500/25 bg-amber-500/5 p-4">
           <AlertCircle className="h-5 w-5 text-amber-500 flex-shrink-0" />
-          <p className="text-sm text-slate-700 dark:text-slate-200">
+          <p className="text-sm text-foreground">
             This shared view is showing estimated sample data, not a live GPS position.
           </p>
         </div>
       )}
 
       {isError && (
-        <div className="glass-panel flex items-center gap-3 rounded-2xl p-3 border border-amber-500/20">
+        <div className="flex items-center gap-3 rounded-2xl border border-amber-500/25 bg-amber-500/5 p-3">
           <AlertCircle className="h-4 w-4 text-amber-500 flex-shrink-0" />
-          <p className="text-xs text-slate-600 dark:text-slate-300">
+          <p className="text-xs text-muted-foreground">
             Live update failed. Showing the last known position for this shared journey.
           </p>
         </div>
       )}
 
       {!isError && dataSource === 'cached' && (
-        <div className="glass-panel flex items-center gap-3 rounded-2xl p-3 border border-sky-500/20">
-          <p className="text-xs text-slate-600 dark:text-slate-300">
+        <div className="flex items-center gap-3 rounded-2xl border border-sky-500/25 bg-sky-500/5 p-3">
+          <p className="text-xs text-muted-foreground">
             Showing a cached snapshot. Live position will refresh shortly.
           </p>
         </div>

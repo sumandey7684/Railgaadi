@@ -102,7 +102,7 @@ function MagneticPill({
     variant === 'primary' &&
       'bg-primary text-primary-foreground shadow-glow hover:bg-sky-600',
     variant === 'secondary' &&
-      'glass-panel border border-border/60 text-foreground/80 hover:border-primary/40 hover:text-primary',
+      'border border-border/60 bg-muted/40 text-foreground/80 hover:border-primary/40 hover:bg-muted/60 hover:text-primary',
     variant === 'tertiary' &&
       'border border-transparent text-muted-foreground hover:border-border hover:bg-muted/50 hover:text-foreground',
     className
@@ -416,7 +416,7 @@ export function CinematicFooter({ className }: { className?: string }) {
             onClick={scrollToTop}
             aria-label="Back to top"
             className={cn(
-              'glass-panel inline-flex items-center gap-2 rounded-full border border-border/60 px-3.5 py-2',
+              'inline-flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-3.5 py-2',
               'text-xs font-semibold text-foreground/80 transition-colors',
               'hover:border-primary/40 hover:text-primary',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60'

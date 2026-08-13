@@ -40,6 +40,25 @@
     --ring: 199 89% 48%;
 
     --radius: 0.875rem;
+
+    /* Liquid glass surfaces (light) */
+    --glass-nav-bg: rgba(255, 255, 255, 0.68);
+    --glass-panel-bg: rgba(255, 255, 255, 0.62);
+    --glass-control-bg: rgba(255, 255, 255, 0.55);
+    --glass-subtle-bg: rgba(255, 255, 255, 0.42);
+    --glass-border: rgba(15, 23, 42, 0.1);
+    --glass-nav-border: rgba(15, 23, 42, 0.1);
+    --glass-highlight: rgba(255, 255, 255, 0.85);
+    --glass-nav-highlight: rgba(255, 255, 255, 0.55);
+    --glass-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+    --glass-nav-shadow: 0 8px 24px rgba(15, 23, 42, 0.08), inset 0 1px 0 var(--glass-nav-highlight);
+    --glass-shadow-hover: 0 14px 36px rgba(15, 23, 42, 0.12);
+    --glass-blur-nav: 20px;
+    --glass-blur-panel: 16px;
+    --glass-blur-control: 12px;
+    --glass-blur-subtle: 8px;
+    --glass-saturate: 160%;
+    --glass-nav-saturate: 140%;
   }
 
   .dark {
@@ -71,6 +90,25 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 199 89% 48%;
+
+    /* Liquid glass surfaces (dark) */
+    --glass-nav-bg: rgba(15, 23, 42, 0.68);
+    --glass-panel-bg: rgba(15, 23, 42, 0.58);
+    --glass-control-bg: rgba(30, 41, 59, 0.55);
+    --glass-subtle-bg: rgba(30, 41, 59, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-nav-border: rgba(255, 255, 255, 0.12);
+    --glass-highlight: rgba(255, 255, 255, 0.1);
+    --glass-nav-highlight: rgba(255, 255, 255, 0.14);
+    --glass-shadow: 0 10px 32px rgba(0, 0, 0, 0.35);
+    --glass-nav-shadow: 0 10px 28px rgba(0, 0, 0, 0.32), inset 0 1px 0 var(--glass-nav-highlight);
+    --glass-shadow-hover: 0 16px 40px rgba(0, 0, 0, 0.45);
+    --glass-blur-nav: 20px;
+    --glass-blur-panel: 18px;
+    --glass-blur-control: 14px;
+    --glass-blur-subtle: 10px;
+    --glass-saturate: 140%;
+    --glass-nav-saturate: 140%;
   }
 }
 
@@ -84,19 +122,175 @@
   }
 }
 
-/* Glassmorphism custom classes */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.78);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+/* ── Liquid glass depth hierarchy ────────────────────────────────
+   1. glass-nav      — sticky chrome (strongest frost)
+   2. glass-panel    — primary floating cards / sheets
+   3. glass-control  — compact controls floating over content/map
+   4. solid / clear  — badges, nested cells, body copy (NO blur)
+   5. map canvas     — opaque hero (never glass the map)
+
+   Do not stack blur inside blur. Nested UI on a glass-panel
+   should use muted/solid fills, not another glass layer.
+*/
+@layer components {
+  /* Shared chrome shell — fill/blur applied in .glass-nav below (outside layer) */
+  .glass-nav,
+  .glass-panel,
+  .glass-control {
+    position: relative;
+    isolation: isolate;
+    border: 1px solid var(--glass-border);
+    background-clip: padding-box;
+    transition:
+      background-color 220ms ease,
+      border-color 220ms ease,
+      box-shadow 220ms ease,
+      transform 180ms ease,
+      opacity 180ms ease;
+  }
+
+  /* 2 - Primary cards & sheets (one blur layer per surface) */
+  .glass-panel {
+    background:
+      linear-gradient(var(--glass-panel-bg), var(--glass-panel-bg)),
+      hsl(var(--card) / 0.92);
+    backdrop-filter: blur(var(--glass-blur-panel)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur-panel)) saturate(var(--glass-saturate));
+    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-highlight);
+  }
+
+  /* 3 — Compact floating controls (map FABs, search field, segmented shell) */
+  .glass-control {
+    background:
+      linear-gradient(var(--glass-control-bg), var(--glass-control-bg)),
+      hsl(var(--card) / 0.9);
+    backdrop-filter: blur(var(--glass-blur-control)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur-control)) saturate(var(--glass-saturate));
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06), inset 0 1px 0 var(--glass-highlight);
+  }
+
+  .dark .glass-control {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28), inset 0 1px 0 var(--glass-highlight);
+  }
+
+  /*
+   * 4 — Nested inset surfaces on top of glass-panel.
+   * Intentionally NO backdrop-filter — avoids stacked blur mush.
+   */
+  .glass-subtle {
+    position: relative;
+    border: 1px solid hsl(var(--border) / 0.7);
+    background: hsl(var(--muted) / 0.55);
+    box-shadow: none;
+  }
+
+  .dark .glass-subtle {
+    background: hsl(var(--muted) / 0.35);
+    border-color: hsl(var(--border) / 0.55);
+  }
+
+  /* Soft lift for interactive primary cards only */
+  .glass-interactive:hover {
+    box-shadow: var(--glass-shadow-hover), inset 0 1px 0 var(--glass-highlight);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .glass-interactive:hover {
+      transform: translateY(-1px);
+    }
+
+    .glass-interactive:active {
+      transform: scale(0.98);
+    }
+  }
 }
 
-.dark .glass-panel {
-  background: rgba(15, 23, 42, 0.78);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/*
+ * Navbar / BottomNav frosted glass.
+ * Kept OUTSIDE @layer components — the layered rule was being dropped from the
+ * production CSS bundle, leaving nav chrome fully transparent.
+ */
+.glass-nav {
+  background-color: rgba(255, 255, 255, 0.68) !important;
+  border: 1px solid rgba(15, 23, 42, 0.1) !important;
+  backdrop-filter: blur(20px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(140%) !important;
+  box-shadow:
+    0 8px 24px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+}
+
+.dark .glass-nav {
+  background-color: rgba(15, 23, 42, 0.68) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass-nav {
+    background-color: rgba(255, 255, 255, 0.94) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .dark .glass-nav {
+    background-color: rgba(15, 23, 42, 0.94) !important;
+  }
+}
+
+/* Readable fallback when transparency is reduced / expensive */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass-nav-bg: rgba(255, 255, 255, 0.97);
+    --glass-panel-bg: rgba(255, 255, 255, 0.96);
+    --glass-control-bg: rgba(255, 255, 255, 0.92);
+    --glass-subtle-bg: rgba(248, 250, 252, 0.95);
+    --glass-blur-nav: 0px;
+    --glass-blur-panel: 0px;
+    --glass-blur-control: 0px;
+    --glass-blur-subtle: 0px;
+  }
+
+  .dark {
+    --glass-nav-bg: rgba(15, 23, 42, 0.98);
+    --glass-panel-bg: rgba(15, 23, 42, 0.97);
+    --glass-control-bg: rgba(30, 41, 59, 0.96);
+    --glass-subtle-bg: rgba(30, 41, 59, 0.92);
+  }
+}
+
+/* Soften panel/control blur on narrow viewports; keep nav frost readable */
+@media (max-width: 640px) {
+  :root {
+    --glass-blur-nav: 20px;
+    --glass-blur-panel: 12px;
+    --glass-blur-control: 10px;
+    --glass-blur-subtle: 6px;
+  }
+
+  .dark {
+    --glass-blur-nav: 20px;
+    --glass-blur-panel: 14px;
+    --glass-blur-control: 10px;
+    --glass-blur-subtle: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-nav,
+  .glass-panel,
+  .glass-control,
+  .glass-subtle,
+  .glass-interactive {
+    transition: none !important;
+  }
+
+  .glass-interactive:hover,
+  .glass-interactive:active {
+    transform: none !important;
+  }
 }
 
 /* Circle-spread theme transition */
@@ -121,6 +315,40 @@
   to {
     clip-path: circle(150% at var(--theme-x, 90%) var(--theme-y, 8%));
   }
+}
+
+/* MapLibre floating chrome only — basemap stays opaque/dark */
+.maplibregl-popup-content {
+  background:
+    linear-gradient(var(--glass-control-bg), var(--glass-control-bg)),
+    hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  backdrop-filter: blur(var(--glass-blur-control)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur-control)) saturate(var(--glass-saturate));
+  box-shadow: var(--glass-shadow);
+  padding: 0;
+  overflow: hidden;
+}
+
+.maplibregl-popup-anchor-top .maplibregl-popup-tip,
+.maplibregl-popup-anchor-top-left .maplibregl-popup-tip,
+.maplibregl-popup-anchor-top-right .maplibregl-popup-tip {
+  border-bottom-color: hsl(var(--card));
+}
+
+.maplibregl-popup-anchor-bottom .maplibregl-popup-tip,
+.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,
+.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip {
+  border-top-color: hsl(var(--card));
+}
+
+.maplibregl-ctrl-attrib {
+  background: hsl(var(--card) / 0.88) !important;
+  color: hsl(var(--muted-foreground)) !important;
+  border: 1px solid hsl(var(--border) / 0.5) !important;
+  border-radius: 8px !important;
 }
 
 /* Custom scrollbar */

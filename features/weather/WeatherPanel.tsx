@@ -94,7 +94,7 @@ export function WeatherPanel({ journey }: WeatherPanelProps) {
 
   if (loading || !weatherData.current) {
     return (
-      <div className="glass-panel rounded-3xl p-6 text-center text-xs text-slate-400">
+      <div className="rounded-3xl border border-border/60 bg-muted/40 p-6 text-center text-xs text-muted-foreground">
         Loading live OpenWeather intelligence...
       </div>
     );

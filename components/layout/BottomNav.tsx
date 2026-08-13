@@ -21,7 +21,7 @@ export function BottomNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
-      <div className="glass-panel mx-3 mb-3 rounded-2xl border border-slate-200/60 dark:border-slate-800/60 shadow-glass overflow-hidden">
+      <div className={cn('glass-nav', 'mx-3 mb-3 overflow-hidden rounded-[1.35rem]')}>
         <div className="flex items-center justify-around px-2 py-2">
           {items.map(({ href, label, icon: Icon, active }) => {
             const isFavoritesTab = label === 'Favorites';
@@ -31,14 +31,14 @@ export function BottomNav() {
                 key={href}
                 href={href}
                 className={cn(
-                  'relative flex flex-col items-center gap-0.5 rounded-xl px-4 py-2 transition-all duration-200',
+                  'relative flex flex-col items-center gap-0.5 rounded-xl px-4 py-2 transition-all duration-200 motion-reduce:transition-none',
                   active
                     ? 'text-rail-blue'
-                    : 'text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                    : 'text-muted-foreground hover:text-foreground'
                 )}
               >
                 <div className="relative">
-                  <Icon className={cn('h-5 w-5 transition-transform', active && 'scale-110')} />
+                  <Icon className={cn('h-5 w-5 transition-transform motion-reduce:transition-none', active && 'scale-110')} />
                   {isFavoritesTab && favorites.length > 0 && (
                     <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-rose-500 text-[8px] font-bold text-white">
                       {favorites.length > 9 ? '9+' : favorites.length}

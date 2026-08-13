@@ -23,7 +23,7 @@ export function MobileJourneySummary({ journey }: MobileJourneySummaryProps) {
     <motion.div
       initial={{ y: 50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="md:hidden glass-panel rounded-2xl border border-slate-200/60 dark:border-slate-800/60 shadow-glass p-4 space-y-3"
+      className="md:hidden glass-panel rounded-2xl p-4 space-y-3"
     >
       <div className="flex items-center justify-between gap-2">
         <div className="min-w-0">
@@ -34,10 +34,10 @@ export function MobileJourneySummary({ journey }: MobileJourneySummaryProps) {
           className={cn(
             'flex-shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-bold border',
             !delayKnown
-              ? 'bg-slate-500/10 text-slate-600 border-slate-500/20'
+              ? 'bg-slate-500/10 text-slate-600 border-slate-500/20 dark:text-slate-300'
               : delayPositive
-              ? 'bg-amber-500/10 text-amber-700 border-amber-500/20'
-              : 'bg-emerald-500/10 text-emerald-700 border-emerald-500/20'
+              ? 'bg-amber-500/10 text-amber-700 border-amber-500/20 dark:text-amber-400'
+              : 'bg-emerald-500/10 text-emerald-700 border-emerald-500/20 dark:text-emerald-400'
           )}
         >
           {!delayKnown
@@ -49,7 +49,7 @@ export function MobileJourneySummary({ journey }: MobileJourneySummaryProps) {
       </div>
 
       <div>
-        <div className="flex items-center justify-between text-[11px] text-slate-500 mb-1">
+        <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 mb-1">
           <span>{journey.origin.name}</span>
           <span className="font-mono font-bold text-rail-blue">{progress.pct.toFixed(0)}%</span>
           <span>{journey.destination.name}</span>

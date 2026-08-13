@@ -52,8 +52,6 @@ const config: Config = {
           rose: '#f43f5e',
           dark: '#0f172a',
           slate: '#1e293b',
-          glass: 'rgba(255, 255, 255, 0.75)',
-          'glass-dark': 'rgba(15, 23, 42, 0.75)',
         },
       },
       borderRadius: {
@@ -78,9 +76,9 @@ const config: Config = {
         'pulse-glow': 'pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
       boxShadow: {
-        glass: '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
-        'glass-hover': '0 12px 40px 0 rgba(31, 38, 135, 0.12)',
-        glow: '0 0 20px -5px rgba(2, 132, 199, 0.4)',
+        glass: 'var(--glass-shadow)',
+        'glass-hover': 'var(--glass-shadow-hover)',
+        glow: '0 0 20px -5px rgba(2, 132, 199, 0.35)',
       },
     },
   },

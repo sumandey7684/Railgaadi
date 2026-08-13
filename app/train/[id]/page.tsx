@@ -21,7 +21,7 @@ import dynamic from 'next/dynamic';
 const MapView = dynamic(() => import('@/features/maps/MapView'), {
   ssr: false,
   loading: () => (
-    <div className="flex h-[480px] w-full items-center justify-center rounded-3xl bg-slate-900/30">
+    <div className="flex h-[480px] w-full items-center justify-center rounded-3xl bg-slate-200/50 dark:bg-slate-900/30">
       <Skeleton className="h-full w-full rounded-3xl" />
     </div>
   ),
@@ -108,16 +108,16 @@ export default function TrainJourneyPage({ params }: { params: { id: string } })
       <div className="py-12 max-w-xl mx-auto space-y-4">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-rail-blue transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-rail-blue transition-colors"
         >
           <ArrowLeft className="h-4 w-4" /> Back to Search
         </Link>
 
         {isQuotaError ? (
-          <div className="glass-panel rounded-3xl p-8 text-center space-y-4 border border-amber-500/20">
+          <div className="glass-panel rounded-3xl p-8 text-center space-y-4 !border-amber-500/25">
             <div className="text-4xl">⏳</div>
-            <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">API Quota Reached</h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
+            <h2 className="text-xl font-extrabold text-foreground">API Quota Reached</h2>
+            <p className="text-sm text-muted-foreground max-w-sm mx-auto">
               The RailRadar free tier allows <strong>50 requests/day</strong>. The daily quota has been exhausted.
               Live tracking will resume tomorrow, or you can upgrade your RailRadar plan.
             </p>
@@ -132,7 +132,7 @@ export default function TrainJourneyPage({ params }: { params: { id: string } })
               </a>
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="inline-flex items-center gap-2 rounded-xl border border-border/60 bg-muted/45 px-4 py-2 text-xs font-semibold text-foreground transition-colors"
               >
                 Back to Search
               </Link>
@@ -174,7 +174,7 @@ export default function TrainJourneyPage({ params }: { params: { id: string } })
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 rounded-xl bg-slate-200/60 dark:bg-slate-800/60 px-3.5 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors"
+          className="inline-flex items-center gap-2 rounded-xl border border-border/60 bg-muted/45 px-3.5 py-2 text-xs font-semibold text-foreground hover:text-rail-blue transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           Back
@@ -195,7 +195,7 @@ export default function TrainJourneyPage({ params }: { params: { id: string } })
           {/* Share */}
           <button
             onClick={handleShare}
-            className="inline-flex items-center gap-2 rounded-xl bg-rail-blue px-3.5 py-2 text-xs font-semibold text-white shadow-glow transition-all hover:bg-sky-600 active:scale-95"
+            className="inline-flex items-center gap-2 rounded-xl bg-rail-blue px-3.5 py-2 text-xs font-semibold text-white shadow-glow transition-all hover:bg-sky-600 active:scale-95 motion-reduce:active:scale-100"
           >
             {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
             <span className="hidden sm:inline">{copied ? 'Copied!' : 'Share'}</span>
@@ -217,9 +217,9 @@ export default function TrainJourneyPage({ params }: { params: { id: string } })
       </div>
 
       {dataSource === 'fallback' && (
-        <div className="glass-panel flex items-center gap-3 rounded-2xl p-4 border border-amber-500/20">
+        <div className="flex items-center gap-3 rounded-2xl border border-amber-500/25 bg-amber-500/5 p-4">
           <AlertCircle className="h-5 w-5 text-amber-500 flex-shrink-0" />
-          <p className="text-sm text-slate-700 dark:text-slate-200">
+          <p className="text-sm text-foreground">
             Estimated sample data for local development. This is not a live train position.
           </p>
         </div>
@@ -227,9 +227,9 @@ export default function TrainJourneyPage({ params }: { params: { id: string } })
 
       {/* ─── Not-Started / Cancelled Banner ─── */}
       {(journey.status === 'not_started' || journey.status === 'cancelled') && (
-        <div className="glass-panel flex items-center gap-3 rounded-2xl p-4 border border-amber-500/20">
+        <div className="flex items-center gap-3 rounded-2xl border border-amber-500/25 bg-amber-500/5 p-4">
           <AlertCircle className="h-5 w-5 text-amber-500 flex-shrink-0" />
-          <p className="text-sm text-slate-700 dark:text-slate-200">
+          <p className="text-sm text-foreground">
             {journey.status === 'not_started'
               ? `Train #${journey.number} hasn't departed yet. Live tracking activates once the journey begins (scheduled departure: ${journey.stations[0]?.scheduledDeparture || 'check timetable'}).`
               : `Train #${journey.number} has been cancelled. Please check NTES for alternate arrangements.`}
@@ -238,7 +238,7 @@ export default function TrainJourneyPage({ params }: { params: { id: string } })
       )}
 
       {/* ─── Tab Selector ─── */}
-      <div className="flex items-center gap-1.5 rounded-2xl glass-panel p-1.5 shadow-glass w-fit flex-wrap">
+      <div className="flex items-center gap-1.5 rounded-2xl glass-control p-1.5 w-fit flex-wrap">
         {TABS.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
@@ -247,7 +247,7 @@ export default function TrainJourneyPage({ params }: { params: { id: string } })
               'flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold transition-all duration-200 whitespace-nowrap',
               activeTab === id
                 ? 'bg-rail-blue text-white shadow-glow'
-                : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'
+                : 'text-muted-foreground hover:bg-foreground/5 hover:text-foreground'
             )}
           >
             <Icon className="h-3.5 w-3.5" />

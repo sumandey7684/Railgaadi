@@ -103,23 +103,27 @@ function HomePageContent() {
   return (
     <div className="space-y-10 py-4">
       {/* ─── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-sky-500/10 via-background to-background p-8 md:p-14 text-center border border-sky-500/20 shadow-glass">
+      <section className="relative overflow-hidden rounded-3xl border border-rail-blue/15 bg-background p-8 text-center md:p-14">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(2,132,199,0.12),transparent_55%)]"
+        />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mx-auto max-w-3xl"
+          className="relative mx-auto max-w-3xl"
         >
-          <div className="inline-flex items-center gap-2 rounded-full border border-sky-500/30 bg-sky-500/10 px-3.5 py-1 text-xs font-semibold text-rail-blue backdrop-blur-md mb-6">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-rail-blue/25 bg-rail-blue/10 px-3.5 py-1 text-xs font-semibold text-rail-blue">
             <Sparkles className="h-3.5 w-3.5" />
             <span>Real-time Indian Railways Intelligence · Powered by RailRadar</span>
           </div>
 
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-6xl">
+          <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl">
             Track Any Train in <span className="text-rail-blue">Real-time.</span>
           </h1>
 
-          <p className="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-xl mx-auto">
+          <p className="mt-4 text-base sm:text-lg text-muted-foreground max-w-xl mx-auto">
             Live GPS tracking, delay analytics, route maps, and weather intelligence for every train across India.
           </p>
 
@@ -128,14 +132,14 @@ function HomePageContent() {
             {/* Input box */}
             <div
               className={cn(
-                'glass-panel flex items-center gap-3 rounded-2xl px-4 py-3.5 shadow-glass transition-all duration-300',
-                isSearchOpen ? 'border-rail-blue/50 shadow-glow ring-1 ring-rail-blue/20' : ''
+                'glass-control flex items-center gap-3 rounded-2xl px-4 py-3.5 transition-shadow duration-300',
+                isSearchOpen ? 'shadow-glow ring-1 ring-rail-blue/25 !border-rail-blue/40' : ''
               )}
             >
               {isLoading && inputValue ? (
                 <Loader2 className="h-5 w-5 flex-shrink-0 text-rail-blue animate-spin" />
               ) : (
-                <Search className="h-5 w-5 flex-shrink-0 text-slate-400" />
+                <Search className="h-5 w-5 flex-shrink-0 text-muted-foreground" />
               )}
 
               <input
@@ -149,19 +153,19 @@ function HomePageContent() {
                 onFocus={() => setIsSearchOpen(true)}
                 onKeyDown={handleInputKeyDown}
                 placeholder="Enter train number (12951) or name (Rajdhani)..."
-                className="w-full bg-transparent text-sm font-medium text-slate-900 placeholder-slate-400 outline-none dark:text-white dark:placeholder-slate-500"
+                className="w-full bg-transparent text-sm font-medium text-foreground placeholder:text-muted-foreground outline-none"
               />
 
               {inputValue && (
                 <button
                   onClick={() => { setInputValue(''); setIsSearchOpen(false); }}
-                  className="flex h-6 w-6 items-center justify-center rounded-full text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
+                  className="flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground hover:bg-foreground/10 transition-colors"
                 >
                   <X className="h-4 w-4" />
                 </button>
               )}
 
-              <kbd className="hidden sm:inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 flex-shrink-0">
+              <kbd className="hidden sm:inline-flex items-center gap-1 rounded-lg border border-border/70 bg-muted/60 px-2 py-0.5 text-[10px] font-semibold text-muted-foreground flex-shrink-0">
                 ⌘ K
               </kbd>
             </div>
@@ -175,7 +179,7 @@ function HomePageContent() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 8, scale: 0.98 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute left-0 right-0 top-full mt-2 z-50 max-h-[360px] overflow-y-auto rounded-2xl glass-panel p-3 shadow-glass-hover border border-slate-200 dark:border-slate-800"
+                  className="absolute left-0 right-0 top-full mt-2 z-50 max-h-[360px] overflow-y-auto rounded-2xl glass-panel p-3"
                 >
                   {/* Error state */}
                   {isError && (
@@ -189,14 +193,14 @@ function HomePageContent() {
                   {isLoading && !searchResults && (
                     <div className="space-y-2 py-1">
                       {[1, 2, 3].map((i) => (
-                        <div key={i} className="h-16 rounded-xl bg-slate-200/60 dark:bg-slate-800/60 animate-pulse" />
+                        <div key={i} className="h-16 rounded-xl bg-muted/70 animate-pulse" />
                       ))}
                     </div>
                   )}
 
                   {/* No results */}
                   {!isLoading && !isError && searchResults && searchResults.length === 0 && (
-                    <div className="py-6 text-center text-xs text-slate-500">
+                    <div className="py-6 text-center text-xs text-muted-foreground">
                       No trains found. Try a train number like <strong>12951</strong> or name like <strong>Rajdhani</strong>.
                     </div>
                   )}
@@ -215,14 +219,14 @@ function HomePageContent() {
                   {/* Results */}
                   {searchResults && searchResults.length > 0 && (
                     <div className="space-y-1.5">
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 px-1 pb-1">
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground px-1 pb-1">
                         {inputValue ? 'Matching Trains' : 'Popular Trains'}
                       </p>
                       {searchResults.map((train) => (
                         <button
                           key={train.id}
                           onClick={() => handleSelect(train)}
-                          className="w-full glass-panel group flex items-center justify-between rounded-xl p-3 transition-all duration-150 hover:bg-rail-blue/5 hover:border-rail-blue/30 text-left"
+                          className="w-full group flex items-center justify-between rounded-xl border border-transparent p-3 transition-colors duration-150 hover:border-rail-blue/20 hover:bg-rail-blue/5 text-left"
                         >
                           <div className="flex items-center gap-3 min-w-0">
                             <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-rail-blue/10 text-rail-blue group-hover:bg-rail-blue group-hover:text-white transition-colors">
@@ -230,15 +234,15 @@ function HomePageContent() {
                             </div>
                             <div className="min-w-0">
                               <div className="flex items-center gap-2 flex-wrap">
-                                <span className="rounded-md bg-slate-100 px-1.5 py-0.5 font-mono text-[11px] font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-200 flex-shrink-0">
+                                <span className="rounded-md border border-border/60 bg-muted/60 px-1.5 py-0.5 font-mono text-[11px] font-bold text-foreground flex-shrink-0">
                                   {train.number}
                                 </span>
-                                <span className="font-semibold text-slate-900 dark:text-white text-sm truncate">
+                                <span className="font-semibold text-foreground text-sm truncate">
                                   {train.name}
                                 </span>
                               </div>
                               {(train.origin.name || train.destination.name) && (
-                                <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-slate-500 truncate">
+                                <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-muted-foreground truncate">
                                   <span>{train.origin.name} ({train.origin.code})</span>
                                   <ArrowRight className="h-2.5 w-2.5 flex-shrink-0" />
                                   <span>{train.destination.name} ({train.destination.code})</span>
@@ -246,7 +250,7 @@ function HomePageContent() {
                               )}
                             </div>
                           </div>
-                          <ArrowRight className="h-4 w-4 text-slate-400 flex-shrink-0 group-hover:text-rail-blue group-hover:translate-x-0.5 transition-all" />
+                          <ArrowRight className="h-4 w-4 text-muted-foreground flex-shrink-0 group-hover:text-rail-blue group-hover:translate-x-0.5 transition-all motion-reduce:group-hover:translate-x-0" />
                         </button>
                       ))}
                     </div>
@@ -258,7 +262,7 @@ function HomePageContent() {
 
           {/* Quick Chips */}
           <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs">
-            <span className="text-slate-400 font-medium">Try:</span>
+            <span className="text-muted-foreground font-medium">Try:</span>
             {['12951', '22436', '12301', '12621'].map((num) => (
               <button
                 key={num}
@@ -267,7 +271,7 @@ function HomePageContent() {
                   setIsSearchOpen(true);
                   inputRef.current?.focus();
                 }}
-                className="rounded-lg bg-slate-200/70 dark:bg-slate-800/70 px-2.5 py-1 font-mono font-semibold text-slate-700 dark:text-slate-300 hover:bg-rail-blue hover:text-white transition-colors"
+                className="rounded-lg border border-border/60 bg-muted/50 px-2.5 py-1 font-mono font-semibold text-foreground hover:border-rail-blue hover:bg-rail-blue hover:text-white transition-colors"
               >
                 {num}
               </button>
@@ -280,13 +284,13 @@ function HomePageContent() {
       {recentSearches.length > 0 && (
         <section className="space-y-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 font-bold text-lg text-slate-900 dark:text-white">
+            <div className="flex items-center gap-2 font-bold text-lg text-foreground">
               <History className="h-5 w-5 text-rail-blue" />
               <span>Recent Searches</span>
             </div>
             <button
               onClick={clearRecentSearches}
-              className="text-xs font-semibold text-slate-400 hover:text-rose-500 transition-colors"
+              className="text-xs font-semibold text-muted-foreground hover:text-rose-500 transition-colors"
             >
               Clear All
             </button>
@@ -297,7 +301,7 @@ function HomePageContent() {
               <Link
                 key={train.id}
                 href={`/train/${train.number}`}
-                className="glass-panel group flex items-center justify-between rounded-2xl p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-glass-hover"
+                className="glass-panel glass-interactive group flex items-center justify-between rounded-2xl p-4"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-rail-blue/10 text-rail-blue group-hover:bg-rail-blue group-hover:text-white transition-colors flex-shrink-0">
@@ -305,10 +309,10 @@ function HomePageContent() {
                   </div>
                   <div className="min-w-0">
                     <span className="font-mono text-[11px] font-bold text-rail-blue block">#{train.number}</span>
-                    <h4 className="font-bold text-slate-900 dark:text-white text-sm truncate">{train.name}</h4>
+                    <h4 className="font-bold text-foreground text-sm truncate">{train.name}</h4>
                   </div>
                 </div>
-                <ArrowRight className="h-4 w-4 text-slate-400 flex-shrink-0 group-hover:translate-x-0.5 group-hover:text-rail-blue transition-all" />
+                <ArrowRight className="h-4 w-4 text-muted-foreground flex-shrink-0 group-hover:translate-x-0.5 group-hover:text-rail-blue transition-all motion-reduce:group-hover:translate-x-0" />
               </Link>
             ))}
           </div>
@@ -347,8 +351,8 @@ function HomePageContent() {
             <div className={cn('h-12 w-12 rounded-2xl flex items-center justify-center', f.color)}>
               {f.icon}
             </div>
-            <h3 className="font-bold text-lg text-slate-900 dark:text-white">{f.title}</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{f.desc}</p>
+            <h3 className="font-bold text-lg text-foreground">{f.title}</h3>
+            <p className="text-xs text-muted-foreground leading-relaxed">{f.desc}</p>
           </motion.div>
         ))}
       </section>

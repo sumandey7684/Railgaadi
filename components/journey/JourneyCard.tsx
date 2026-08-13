@@ -48,7 +48,7 @@ export function JourneyCard({
   return (
     <div
       className={cn(
-        'glass-panel relative overflow-hidden rounded-3xl p-6 shadow-glass transition-all duration-300',
+        'glass-panel relative overflow-hidden rounded-3xl p-6',
         className
       )}
     >
@@ -61,12 +61,12 @@ export function JourneyCard({
             <DelayBadge delayMinutes={journey.delayMinutes} />
             <DataSourceBadge dataSource={dataSource} />
           </div>
-          <h2 className="mt-2 text-2xl font-bold text-slate-900 dark:text-white">
+          <h2 className="mt-2 text-2xl font-bold text-foreground">
             {journey.name}
           </h2>
-          <div className="mt-1 flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+          <div className="mt-1 flex items-center gap-2 text-xs font-semibold text-muted-foreground">
             <span>{journey.origin.name} ({journey.origin.code})</span>
-            <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
+            <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" />
             <span>{journey.destination.name} ({journey.destination.code})</span>
           </div>
         </div>
@@ -77,7 +77,7 @@ export function JourneyCard({
             <button
               onClick={onRefresh}
               disabled={isRefreshing}
-              className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100/80 text-slate-600 transition-colors hover:bg-slate-200 dark:bg-slate-800/80 dark:text-slate-300 dark:hover:bg-slate-700"
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-border/60 bg-muted/50 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               title="Refresh Live Status"
             >
               <RefreshCw
@@ -89,62 +89,62 @@ export function JourneyCard({
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="flex items-center gap-3.5 rounded-2xl border border-slate-100 bg-slate-50/70 p-4 dark:border-slate-800/60 dark:bg-slate-900/50">
+        <div className="glass-subtle flex items-center gap-3.5 rounded-2xl p-4">
           <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
             <MapPin className="h-5 w-5" />
           </div>
           <div className="min-w-0">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
               {atStation ? 'Current Halt' : 'Last Halt'}
             </span>
-            <p className="font-semibold text-slate-900 dark:text-white truncate">
+            <p className="font-semibold text-foreground truncate">
               {current?.name || previous?.name || 'In Transit'}
             </p>
             {next && (
-              <span className="text-xs text-slate-500 dark:text-slate-400 truncate block">
+              <span className="text-xs text-muted-foreground truncate block">
                 Next: {next.name}
                 {next.platform ? ` · PF ${next.platform}` : ''}
               </span>
             )}
             {current?.platform && (
-              <span className="text-xs text-slate-500 dark:text-slate-400">
+              <span className="text-xs text-muted-foreground">
                 Platform {current.platform}
               </span>
             )}
           </div>
         </div>
 
-        <div className="flex items-center gap-3.5 rounded-2xl border border-slate-100 bg-slate-50/70 p-4 dark:border-slate-800/60 dark:bg-slate-900/50">
+        <div className="glass-subtle flex items-center gap-3.5 rounded-2xl p-4">
           <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-rail-blue/10 text-rail-blue">
             <Gauge className="h-5 w-5" />
           </div>
           <div>
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
               {journey.speedSource === 'live' ? 'Live Speed' : speedIsTypical ? 'Typical Speed' : 'Speed'}
             </span>
             <div className="flex items-baseline gap-1">
-              <span className="font-mono text-xl font-bold text-slate-900 dark:text-white">
+              <span className="font-mono text-xl font-bold text-foreground">
                 {speedValue != null ? speedValue : '—'}
               </span>
               {speedValue != null && (
-                <span className="text-xs font-semibold text-slate-500">km/h</span>
+                <span className="text-xs font-semibold text-muted-foreground">km/h</span>
               )}
             </div>
             {speedIsTypical && speedValue != null && (
-              <span className="text-[10px] text-slate-400">Catalog average · not live</span>
+              <span className="text-[10px] text-muted-foreground">Catalog average · not live</span>
             )}
           </div>
         </div>
 
-        <div className="flex items-center justify-between rounded-2xl border border-slate-100 bg-slate-50/70 p-4 dark:border-slate-800/60 dark:bg-slate-900/50">
+        <div className="glass-subtle flex items-center justify-between rounded-2xl p-4">
           <div>
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
               Distance Covered
             </span>
-            <p className="font-mono text-base font-bold text-slate-900 dark:text-white">
+            <p className="font-mono text-base font-bold text-foreground">
               {formatDistance(progress.coveredKm)} / {formatDistance(progress.totalKm)}
             </p>
-            <span className="text-xs text-slate-500 dark:text-slate-400">
+            <span className="text-xs text-muted-foreground">
               {formatDistance(progress.remainingKm)} remaining
             </span>
           </div>
@@ -152,7 +152,7 @@ export function JourneyCard({
         </div>
       </div>
 
-      <div className="mt-4 flex items-center justify-between text-xs text-slate-400">
+      <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
         <span>
           {dataSource === 'fallback'
             ? 'Estimated data · not a live GPS position'

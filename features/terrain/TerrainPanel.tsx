@@ -45,25 +45,25 @@ export function TerrainPanel({ trainId }: TerrainPanelProps) {
       <div className="flex items-center gap-2 font-bold text-lg text-slate-900 dark:text-white">
         <Mountain className="h-5 w-5 text-emerald-500" />
         <span>Terrain & Points of Interest</span>
-        <span className="ml-auto text-xs font-normal text-slate-400">via Overpass API</span>
+        <span className="ml-auto text-xs font-normal text-slate-500 dark:text-slate-400">via Overpass API</span>
         <DataSourceBadge dataSource={dataSource} />
       </div>
 
       {loading && (
-        <div className="glass-panel flex items-center gap-3 rounded-2xl p-5 text-sm text-slate-500">
+        <div className="flex items-center gap-3 rounded-2xl border border-border/60 bg-muted/40 p-5 text-sm text-muted-foreground">
           <Loader2 className="h-4 w-4 animate-spin text-rail-blue" />
           <span>Fetching bridges, rivers & terrain features along route…</span>
         </div>
       )}
 
       {error && !loading && (
-        <div className="glass-panel rounded-2xl p-5 text-sm text-slate-500">
+        <div className="rounded-2xl border border-border/60 bg-muted/40 p-5 text-sm text-muted-foreground">
           Terrain data is temporarily unavailable. Try again later.
         </div>
       )}
 
       {!loading && !error && features.length === 0 && (
-        <div className="glass-panel flex items-center gap-3 rounded-2xl p-5 text-sm text-slate-500">
+        <div className="flex items-center gap-3 rounded-2xl border border-border/60 bg-muted/40 p-5 text-sm text-muted-foreground">
           <MapPin className="h-4 w-4" />
           <span>No terrain features found along this route.</span>
         </div>

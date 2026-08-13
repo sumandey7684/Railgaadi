@@ -67,7 +67,7 @@ export function AnalyticsDashboard({ journey }: AnalyticsDashboardProps) {
   if (loading || !analytics) {
     return (
       <div className="space-y-4">
-        <div className="glass-panel rounded-2xl p-5 text-xs text-slate-400 text-center">
+        <div className="rounded-2xl border border-border/60 bg-muted/40 p-5 text-xs text-muted-foreground text-center">
           Computing journey analytics & elevation profile from OpenTopography…
         </div>
       </div>
@@ -95,12 +95,12 @@ export function AnalyticsDashboard({ journey }: AnalyticsDashboardProps) {
             key={label}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="glass-panel rounded-2xl p-4 space-y-1"
+            className="rounded-2xl border border-border/60 bg-muted/40 p-4 space-y-1"
           >
             <div className={cn('flex h-8 w-8 items-center justify-center rounded-xl', bg)}>
               <Icon className={cn('h-4 w-4', color)} />
             </div>
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">{label}</p>
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">{label}</p>
             <AnimatedCounter value={value} suffix={suffix} />
           </motion.div>
         ))}
@@ -110,7 +110,7 @@ export function AnalyticsDashboard({ journey }: AnalyticsDashboardProps) {
       <ElevationProfile data={analytics.elevationProfile} highestElevationM={analytics.highestElevationM} />
 
       {/* ─── Delay Bar Chart ─── */}
-      <div className="glass-panel rounded-3xl p-6 shadow-glass space-y-4">
+      <div className="glass-panel rounded-3xl p-6 space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
             <BarChart3 className="h-4 w-4 text-amber-500" />
@@ -151,7 +151,7 @@ export function AnalyticsDashboard({ journey }: AnalyticsDashboardProps) {
             })}
           </div>
         ) : (
-          <p className="text-xs text-slate-400">No delay history available.</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">No delay history available.</p>
         )}
       </div>
     </div>

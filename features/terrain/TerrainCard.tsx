@@ -7,19 +7,19 @@ interface TerrainCardProps {
 }
 
 const TYPE_CONFIG = {
-  bridge: { emoji: '🌉', label: 'Bridge', color: 'bg-amber-500/10 text-amber-600 border-amber-500/20' },
+  bridge: { emoji: '🌉', label: 'Bridge', color: 'bg-amber-500/10 text-amber-600 border-amber-500/20 dark:text-amber-400' },
   tunnel: { emoji: '🚇', label: 'Tunnel', color: 'bg-slate-500/10 text-slate-600 border-slate-500/20 dark:text-slate-300' },
-  river: { emoji: '🌊', label: 'River', color: 'bg-sky-500/10 text-sky-600 border-sky-500/20' },
-  mountain: { emoji: '⛰️', label: 'Peak', color: 'bg-emerald-500/10 text-emerald-700 border-emerald-500/20' },
-  tourist: { emoji: '🏛️', label: 'Attraction', color: 'bg-purple-500/10 text-purple-700 border-purple-500/20' },
-  city: { emoji: '🏙️', label: 'City', color: 'bg-rose-500/10 text-rose-600 border-rose-500/20' },
+  river: { emoji: '🌊', label: 'River', color: 'bg-sky-500/10 text-sky-600 border-sky-500/20 dark:text-sky-400' },
+  mountain: { emoji: '⛰️', label: 'Peak', color: 'bg-emerald-500/10 text-emerald-700 border-emerald-500/20 dark:text-emerald-400' },
+  tourist: { emoji: '🏛️', label: 'Attraction', color: 'bg-purple-500/10 text-purple-700 border-purple-500/20 dark:text-purple-300' },
+  city: { emoji: '🏙️', label: 'City', color: 'bg-rose-500/10 text-rose-600 border-rose-500/20 dark:text-rose-400' },
 };
 
 export function TerrainCard({ feature }: TerrainCardProps) {
   const cfg = TYPE_CONFIG[feature.type] || TYPE_CONFIG.tourist;
 
   return (
-    <div className="glass-panel flex-shrink-0 w-44 rounded-2xl p-4 space-y-2 border shadow-glass transition-all hover:-translate-y-0.5 hover:shadow-glass-hover">
+    <div className="glass-panel flex-shrink-0 w-44 rounded-2xl p-4 space-y-2 transition-transform hover:-translate-y-0.5 motion-reduce:hover:translate-y-0">
       <div className="text-2xl">{cfg.emoji}</div>
       <div>
         <span className={cn('text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border', cfg.color)}>

@@ -54,7 +54,7 @@ export default function FavoritesPage() {
               >
                 <Link
                   href={`/train/${train.number}`}
-                  className="glass-panel group relative flex items-center justify-between rounded-2xl p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-glass-hover"
+                  className="glass-panel glass-interactive group relative flex items-center justify-between rounded-2xl p-4"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-rail-blue/10 text-rail-blue group-hover:bg-rail-blue group-hover:text-white transition-colors">

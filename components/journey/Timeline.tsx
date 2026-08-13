@@ -31,13 +31,13 @@ export function Timeline({ journey, className }: TimelineProps) {
   }, [currentCode]);
 
   return (
-    <div className={cn('glass-panel rounded-3xl p-6 shadow-glass', className)}>
+    <div className={cn('glass-panel rounded-3xl p-6', className)}>
       <h3 className="mb-6 text-lg font-bold text-slate-900 dark:text-white">
         Station Route Timeline
       </h3>
 
-      <div className="relative max-h-[640px] overflow-y-auto pl-6 before:absolute before:bottom-3 before:left-3 before:top-3 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800">
-        <div className="space-y-6">
+      <div className="max-h-[640px] overflow-y-auto overflow-x-hidden pr-1">
+        <div className="relative space-y-6 py-1 pl-1 before:absolute before:bottom-3 before:left-[15px] before:top-3 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800">
           {stations.map((st, idx) => {
             const isPassed = st.status === 'passed';
             const isCurrent = st.status === 'current';
@@ -60,11 +60,11 @@ export function Timeline({ journey, className }: TimelineProps) {
                   setFollowTrainMode(false);
                 }}
                 className={cn(
-                  'relative flex w-full items-start justify-between gap-4 rounded-xl p-1 text-left transition-colors',
+                  'relative flex w-full items-start gap-3 rounded-xl p-1 text-left transition-colors',
                   isSelected && 'bg-rail-blue/5 ring-1 ring-rail-blue/20'
                 )}
               >
-                <div className="absolute -left-6 top-0.5 flex h-6 w-6 -translate-x-1/2 items-center justify-center rounded-full bg-background">
+                <div className="relative z-10 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-background">
                   {isPassed && (
                     <CheckCircle2 className="h-5 w-5 text-emerald-500 fill-emerald-500/20" />
                   )}
@@ -75,11 +75,11 @@ export function Timeline({ journey, className }: TimelineProps) {
                     </div>
                   )}
                   {isUpcoming && (
-                    <Circle className="h-4 w-4 text-slate-300 dark:text-slate-700" />
+                    <Circle className="h-4 w-4 text-slate-300 dark:text-slate-500" />
                   )}
                 </div>
 
-                <div className="flex-1 pl-2">
+                <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <h4
                       className={cn(
@@ -101,7 +101,7 @@ export function Timeline({ journey, className }: TimelineProps) {
                     )}
 
                     {st.platform && (
-                      <span className="rounded-md border border-slate-200 bg-slate-100 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+                      <span className="rounded-md border border-border/60 bg-muted/60 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-muted-foreground">
                         PF {st.platform}
                       </span>
                     )}
@@ -113,9 +113,9 @@ export function Timeline({ journey, className }: TimelineProps) {
                   </div>
                 </div>
 
-                <div className="text-right font-mono text-xs">
+                <div className="flex-shrink-0 text-right font-mono text-xs">
                   {showScheduled && (
-                    <div className="text-[10px] text-slate-400">
+                    <div className="text-[10px] text-slate-400 dark:text-slate-500">
                       SCH {scheduled.time}
                     </div>
                   )}
@@ -124,7 +124,7 @@ export function Timeline({ journey, className }: TimelineProps) {
                     {arrival.time}
                   </div>
                   {departure.time !== '—' && departure.time !== arrival.time && (
-                    <div className="text-[10px] text-slate-500">
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400">
                       {departure.label ? `${departure.label} ` : 'Dep '}
                       {departure.time}
                     </div>

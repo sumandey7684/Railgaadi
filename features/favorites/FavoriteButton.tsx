@@ -26,11 +26,11 @@ export function FavoriteButton({ train, className, size = 'md' }: FavoriteButton
       }}
       title={isFav ? 'Remove from favorites' : 'Add to favorites'}
       className={cn(
-        'flex items-center justify-center rounded-xl transition-all duration-200 active:scale-90',
+        'flex items-center justify-center rounded-xl border border-border/60 bg-muted/45 transition-all duration-200 active:scale-90 motion-reduce:active:scale-100',
         size === 'sm' ? 'h-8 w-8' : 'h-10 w-10',
         isFav
-          ? 'bg-rose-500/15 text-rose-500 hover:bg-rose-500/25'
-          : 'bg-slate-200/60 dark:bg-slate-800/60 text-slate-400 hover:bg-rose-500/15 hover:text-rose-500',
+          ? 'border-rose-500/30 bg-rose-500/15 text-rose-500 hover:bg-rose-500/25'
+          : 'text-muted-foreground hover:border-rose-500/25 hover:text-rose-500',
         className
       )}
     >

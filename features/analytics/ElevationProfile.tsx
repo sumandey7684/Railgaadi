@@ -30,7 +30,7 @@ export function ElevationProfile({ data, highestElevationM }: ElevationProfilePr
   const areaPath = `M 0,${svgHeight} L ${pointsString} L ${svgWidth},${svgHeight} Z`;
 
   return (
-    <div className="glass-panel rounded-3xl p-6 shadow-glass space-y-4">
+    <div className="glass-panel rounded-3xl p-6 space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 font-bold text-lg text-slate-900 dark:text-white">
           <Mountain className="h-5 w-5 text-emerald-500" />
@@ -71,7 +71,7 @@ export function ElevationProfile({ data, highestElevationM }: ElevationProfilePr
         </svg>
       </div>
 
-      <div className="flex justify-between text-xs font-mono font-semibold text-slate-400">
+      <div className="flex justify-between text-xs font-mono font-semibold text-slate-500 dark:text-slate-400">
         <span>0 km (Origin)</span>
         <span>{data[data.length - 1]?.distanceKm} km (Destination)</span>
       </div>

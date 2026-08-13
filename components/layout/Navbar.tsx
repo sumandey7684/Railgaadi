@@ -18,17 +18,22 @@ export function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full px-4 pt-4 pb-2">
-      <div className="glass-panel mx-auto flex max-w-7xl items-center justify-between rounded-2xl px-6 py-3 shadow-glass">
+    <header className="sticky top-0 z-50 w-full px-3 pt-3 pb-2 sm:px-4 sm:pt-4">
+      <div
+        className={cn(
+          'glass-nav',
+          'mx-auto flex max-w-7xl items-center justify-between overflow-hidden rounded-[1.35rem] px-4 py-2.5 sm:rounded-2xl sm:px-6 sm:py-3'
+        )}
+      >
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-rail-blue text-white shadow-glow transition-transform group-hover:scale-105">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-rail-blue text-white shadow-glow transition-transform duration-200 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100">
             <Train className="h-5 w-5" />
           </div>
           <div>
             <span className="text-lg font-extrabold tracking-tight text-foreground">
               Rail<span className="text-rail-blue">Gaadi</span>
             </span>
-            <span className="hidden sm:inline-block ml-2 rounded-full bg-rail-blue/10 px-2 py-0.5 font-mono text-[10px] font-bold text-rail-blue">
+            <span className="ml-2 hidden rounded-full border border-rail-blue/20 bg-rail-blue/10 px-2 py-0.5 font-mono text-[10px] font-bold text-rail-blue sm:inline-block">
               LIVE
             </span>
           </div>

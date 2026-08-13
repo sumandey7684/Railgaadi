@@ -14,7 +14,7 @@ export function DelayBadge({ delayMinutes, className }: DelayBadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full border px-3 py-1 font-mono text-xs font-bold tracking-tight backdrop-blur-md transition-colors',
+        'inline-flex items-center gap-1.5 rounded-full border px-3 py-1 font-mono text-xs font-bold tracking-tight transition-colors',
         badgeBg,
         className
       )}

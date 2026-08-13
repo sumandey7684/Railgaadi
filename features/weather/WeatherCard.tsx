@@ -16,7 +16,7 @@ export function WeatherCard({ label, weather, className }: WeatherCardProps) {
   return (
     <div
       className={cn(
-        'glass-panel relative overflow-hidden rounded-2xl p-5 shadow-glass space-y-3',
+        'glass-panel relative overflow-hidden rounded-2xl p-5 space-y-3',
         className
       )}
     >
@@ -34,20 +34,20 @@ export function WeatherCard({ label, weather, className }: WeatherCardProps) {
       </div>
 
       <div>
-        <h4 className="font-bold text-slate-900 dark:text-white text-base">
+        <h4 className="font-bold text-foreground text-base">
           {weather.stationName || 'Station'} ({weather.stationCode || '---'})
         </h4>
         <div className="mt-1 flex items-baseline gap-2">
-          <span className="font-mono text-3xl font-extrabold text-slate-900 dark:text-white">
+          <span className="font-mono text-3xl font-extrabold text-foreground">
             {weather.tempC}°C
           </span>
-          <span className="text-xs text-slate-500">Feels like {weather.feelsLikeC}°C</span>
+          <span className="text-xs text-muted-foreground">Feels like {weather.feelsLikeC}°C</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200/60 dark:border-slate-800/60 text-xs font-semibold text-slate-600 dark:text-slate-300">
+      <div className="grid grid-cols-2 gap-2 pt-2 border-t border-border/60 text-xs font-semibold text-foreground/80">
         <div className="flex items-center gap-1.5">
-          <Wind className="h-3.5 w-3.5 text-slate-400" />
+          <Wind className="h-3.5 w-3.5 text-muted-foreground" />
           <span>{weather.windSpeedKmh} km/h wind</span>
         </div>
         <div className="flex items-center gap-1.5">

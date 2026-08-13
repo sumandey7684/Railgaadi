@@ -145,9 +145,9 @@ export default function MapView({ journey, className }: MapViewProps) {
 
       const popup = new maplibregl.Popup({ offset: 16, closeButton: false }).setHTML(`
         <div class="p-2 font-sans">
-          <div class="font-bold text-xs">${escapeHtml(journey.name)}</div>
-          <div class="text-[11px] text-gray-500">#${escapeHtml(journey.number)}</div>
-          <div class="text-[11px] font-semibold text-sky-600 mt-0.5">
+          <div class="font-bold text-xs text-slate-900 dark:text-white">${escapeHtml(journey.name)}</div>
+          <div class="text-[11px] text-slate-500 dark:text-slate-400">#${escapeHtml(journey.number)}</div>
+          <div class="text-[11px] font-semibold text-sky-600 dark:text-sky-400 mt-0.5">
             ${escapeHtml(sourceLabel)} · ${delayText}
           </div>
         </div>`);
@@ -184,17 +184,17 @@ export default function MapView({ journey, className }: MapViewProps) {
 
       const popup = new maplibregl.Popup({ offset: 10, closeButton: false }).setHTML(`
         <div class="p-2 font-sans">
-          <div class="font-bold text-xs">${escapeHtml(st.name)} (${escapeHtml(st.code)})</div>
-          <div class="text-[11px] text-gray-500 mt-0.5">${escapeHtml(st.distanceKm)} km from origin</div>
-          <div class="text-[11px] font-semibold mt-0.5">
+          <div class="font-bold text-xs text-slate-900 dark:text-white">${escapeHtml(st.name)} (${escapeHtml(st.code)})</div>
+          <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">${escapeHtml(st.distanceKm)} km from origin</div>
+          <div class="text-[11px] font-semibold mt-0.5 text-slate-800 dark:text-slate-200">
             ${arrival.label ? `${escapeHtml(arrival.label)} ` : ''}${escapeHtml(arrival.time)}
           </div>
           ${
             delay.known
-              ? `<div class="text-[11px] ${st.delayMinutes && st.delayMinutes > 0 ? 'text-amber-600' : 'text-emerald-600'}">${escapeHtml(delay.text)}</div>`
+              ? `<div class="text-[11px] ${st.delayMinutes && st.delayMinutes > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400'}">${escapeHtml(delay.text)}</div>`
               : ''
           }
-          ${st.platform ? `<div class="text-[11px] text-gray-500">Platform ${escapeHtml(st.platform)}</div>` : ''}
+          ${st.platform ? `<div class="text-[11px] text-slate-500 dark:text-slate-400">Platform ${escapeHtml(st.platform)}</div>` : ''}
         </div>`);
 
       const marker = new maplibregl.Marker({ element: el, anchor: 'center' })
@@ -244,8 +244,8 @@ export default function MapView({ journey, className }: MapViewProps) {
             onClick={action}
             title={title}
             className={cn(
-              'glass-panel flex h-10 w-10 items-center justify-center rounded-xl shadow-md transition-all hover:scale-105',
-              isActive ? 'bg-rail-blue text-white shadow-glow border-rail-blue' : 'text-slate-700 dark:text-slate-200'
+              'glass-control flex h-10 w-10 items-center justify-center rounded-xl transition-transform duration-200 motion-reduce:transition-none hover:scale-105 motion-reduce:hover:scale-100',
+              isActive ? 'bg-rail-blue text-white shadow-glow !border-rail-blue' : 'text-foreground'
             )}
           >
             <Icon className="h-4 w-4" />
@@ -260,11 +260,11 @@ export default function MapView({ journey, className }: MapViewProps) {
             if (!followTrainMode) setSelectedStationCode(null);
           }}
           className={cn(
-            'glass-panel flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold shadow-md transition-all',
-            followTrainMode ? 'text-rail-blue border-rail-blue/30' : 'text-slate-500'
+            'glass-control flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors',
+            followTrainMode ? 'text-rail-blue !border-rail-blue/35' : 'text-muted-foreground'
           )}
         >
-          <span className={cn('h-2 w-2 rounded-full', followTrainMode ? 'bg-rail-blue animate-ping' : 'bg-slate-400')} />
+          <span className={cn('h-2 w-2 rounded-full', followTrainMode ? 'bg-rail-blue animate-ping motion-reduce:animate-none' : 'bg-muted-foreground')} />
           {followTrainMode ? 'Following Train' : 'Camera Free'}
         </button>
       </div>
