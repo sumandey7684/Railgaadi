@@ -15,7 +15,7 @@ export const env = {
   // Overpass (public OSM interpreter)
   OVERPASS_API_URL: process.env.OVERPASS_API_URL || 'https://overpass-api.de/api/interpreter',
 
-  // Upstash Redis (Phase 2)
+  // Upstash Redis (server-only shared cache + rate limiting)
   UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL || '',
   UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN || '',
 };

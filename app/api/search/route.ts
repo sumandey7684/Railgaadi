@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
   }
 
   const cacheKey = `search:live:${q.toLowerCase()}`;
-  const cached = getCached<SearchResult[]>(cacheKey);
+  const cached = await getCached<SearchResult[]>(cacheKey);
   if (cached) {
     return NextResponse.json<ApiResponse<SearchResult[]>>({
       success: true,
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
     const matched = results.filter(
       (t) => t.number.toLowerCase().includes(needle) || t.name.toLowerCase().includes(needle)
     );
-    setCached(cacheKey, matched, 600);
+    await setCached(cacheKey, matched, 600);
 
     return NextResponse.json<ApiResponse<SearchResult[]>>({
       success: true,

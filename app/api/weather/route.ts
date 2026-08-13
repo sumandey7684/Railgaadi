@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
   }
 
   const cacheKey = `weather:${lat.toFixed(2)}:${lng.toFixed(2)}`;
-  const cached = getCached<CachedWeather>(cacheKey);
+  const cached = await getCached<CachedWeather>(cacheKey);
   if (cached) {
     const dataSource: DataSource = cached.originSource === 'fallback' ? 'fallback' : 'cached';
     return NextResponse.json<ApiResponse<WeatherData>>({
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const result = await getWeatherForLocation(lat, lng, name, code);
-    setCached(cacheKey, { weather: result.data, originSource: result.dataSource }, 900);
+    await setCached(cacheKey, { weather: result.data, originSource: result.dataSource }, 900);
 
     return NextResponse.json<ApiResponse<WeatherData>>({
       success: true,

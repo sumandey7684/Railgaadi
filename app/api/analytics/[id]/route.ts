@@ -27,7 +27,7 @@ export async function GET(
   const trainId = params.id;
   const cacheKey = `analytics:${trainId}`;
 
-  const cached = getCached<CachedAnalytics>(cacheKey);
+  const cached = await getCached<CachedAnalytics>(cacheKey);
   if (cached) {
     const dataSource: DataSource = cached.originSource === 'fallback' ? 'fallback' : 'cached';
     return NextResponse.json<ApiResponse<AnalyticsResponse>>({
@@ -77,7 +77,7 @@ export async function GET(
       delayHistory,
     };
 
-    setCached(cacheKey, { result, originSource: elevation.dataSource }, 300);
+    await setCached(cacheKey, { result, originSource: elevation.dataSource }, 300);
 
     return NextResponse.json<ApiResponse<AnalyticsResponse>>({
       success: true,

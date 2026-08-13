@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { rateLimit } from '@/lib/rate-limit';
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const forwarded = request.headers.get('x-forwarded-for');
   const ip =
     forwarded?.split(',')[0]?.trim() ||
     request.headers.get('x-real-ip') ||
     'local';
 
-  const result = rateLimit(ip);
+  const result = await rateLimit(ip);
   if (!result.ok) {
     return NextResponse.json(
       {

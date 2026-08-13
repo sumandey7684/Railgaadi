@@ -39,14 +39,14 @@ function fromCache(cached: CachedLiveJourney): LoadedLiveJourney {
  */
 export async function loadCachedLiveJourney(trainId: string): Promise<LoadedLiveJourney> {
   const cacheKey = liveJourneyCacheKey(trainId);
-  const cached = getCached<CachedLiveJourney>(cacheKey);
+  const cached = await getCached<CachedLiveJourney>(cacheKey);
   if (cached) return fromCache(cached);
 
   let pending = inflight.get(trainId);
   if (!pending) {
-    pending = getLiveJourney(trainId).then((result) => {
+    pending = getLiveJourney(trainId).then(async (result) => {
       if (result.ok) {
-        setCached(
+        await setCached(
           cacheKey,
           { journey: result.journey, originSource: result.dataSource } satisfies CachedLiveJourney,
           LIVE_JOURNEY_TTL_SECONDS

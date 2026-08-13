@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
   }
 
   const cacheKey = `terrain:${trainId}`;
-  const cached = getCached<CachedTerrain>(cacheKey);
+  const cached = await getCached<CachedTerrain>(cacheKey);
   if (cached) {
     const dataSource: DataSource = cached.originSource === 'fallback' ? 'fallback' : 'cached';
     return NextResponse.json<ApiResponse<TerrainFeature[]>>({
@@ -72,7 +72,7 @@ export async function GET(request: NextRequest) {
 
     features.sort((a, b) => (a.distanceKm ?? 0) - (b.distanceKm ?? 0));
 
-    setCached(cacheKey, { features, originSource: result.dataSource }, 86400);
+    await setCached(cacheKey, { features, originSource: result.dataSource }, 86400);
 
     return NextResponse.json<ApiResponse<TerrainFeature[]>>({
       success: true,
