@@ -1,8 +1,12 @@
 import { SearchResult, LiveJourney, Station } from '@/types/train';
 import { DataSource } from '@/types/api';
 import { env } from '@/config/env';
-import { searchLocalTrains, TRAINS_DB } from '@/lib/trains-db';
+import { TRAINS_DB } from '@/lib/trains-db';
 import { interpolateAlongRoute, progressAlongRoute, LngLat } from '@/lib/geo';
+import {
+  RAILRADAR_BUDGET_EXCEEDED,
+  tryConsumeRailRadarBudget,
+} from '@/lib/railradar-budget';
 
 const RR_BASE = 'https://api.railradar.in/v1';
 
@@ -565,48 +569,64 @@ function generateFallbackJourney(trainNumber: string): LiveJourney | null {
 
 // ─── Public API ────────────────────────────────────────────────────────────
 
+export class RailRadarQuotaError extends Error {
+  readonly status = 429;
+  readonly code = 'QUOTA_EXCEEDED' as const;
+
+  constructor(message = RAILRADAR_BUDGET_EXCEEDED) {
+    super(message);
+    this.name = 'RailRadarQuotaError';
+  }
+}
+
+/**
+ * Live RailRadar lookup only. Does not fall back to local DB — callers own
+ * local-first logic and dataSource labeling. Consumes 1 daily budget unit.
+ */
 export async function searchTrains(query: string): Promise<SearchResult[]> {
   const q = query.trim();
   if (!q) {
-    return searchLocalTrains('').map((t) => ({
-      id: t.number,
-      number: t.number,
-      name: t.name,
-      origin: { code: t.fromCode, name: t.from },
-      destination: { code: t.toCode, name: t.to },
-    }));
+    throw new Error('Search query is required for live lookup');
   }
 
-  try {
-    const res = await rrFetch(`${RR_BASE}/lookup/trains?q=${encodeURIComponent(q)}`);
-    if (!res.ok) {
-      const json = await res.json().catch(() => ({}));
-      throw new Error(extractErrorMessage(json) || `Lookup failed: ${res.status}`);
+  if (!env.RAILRADAR_API_KEY) {
+    throw new Error('RAILRADAR_API_KEY is not configured');
+  }
+
+  const budget = await tryConsumeRailRadarBudget(1);
+  if (!budget.ok) {
+    throw new RailRadarQuotaError(RAILRADAR_BUDGET_EXCEEDED);
+  }
+
+  const res = await rrFetch(`${RR_BASE}/lookup/trains?q=${encodeURIComponent(q)}`);
+  if (!res.ok) {
+    const json = await res.json().catch(() => ({}));
+    const msg = extractErrorMessage(json) || `Lookup failed: ${res.status}`;
+    if (res.status === 429 || (json as { error?: { code?: string } })?.error?.code === 'TOO_MANY_REQUESTS') {
+      throw new RailRadarQuotaError(`QUOTA_EXCEEDED: ${msg}`);
     }
-
-    const json = await res.json();
-    if (!json.success) throw new Error(extractErrorMessage(json));
-
-    const data: Record<string, string> = json?.data || {};
-    return Object.entries(data)
-      .slice(0, 15)
-      .map(([number, name]) => ({
-        id: number,
-        number,
-        name,
-        origin: { code: '', name: '' },
-        destination: { code: '', name: '' },
-      }));
-  } catch (err) {
-    console.warn('RailRadar lookup API fetch failed, using local DB fallback');
-    return searchLocalTrains(q).map((t) => ({
-      id: t.number,
-      number: t.number,
-      name: t.name,
-      origin: { code: t.fromCode, name: t.from },
-      destination: { code: t.toCode, name: t.to },
-    }));
+    throw new Error(msg);
   }
+
+  const json = await res.json();
+  if (!json.success) {
+    const msg = extractErrorMessage(json);
+    if (json?.error?.code === 'TOO_MANY_REQUESTS') {
+      throw new RailRadarQuotaError(`QUOTA_EXCEEDED: ${msg}`);
+    }
+    throw new Error(msg);
+  }
+
+  const data: Record<string, string> = json?.data || {};
+  return Object.entries(data)
+    .slice(0, 15)
+    .map(([number, name]) => ({
+      id: number,
+      number,
+      name,
+      origin: { code: '', name: '' },
+      destination: { code: '', name: '' },
+    }));
 }
 
 export type LiveJourneyResult =
@@ -642,8 +662,6 @@ export function resetLiveFetchCount(): void {
 }
 
 export async function getLiveJourney(trainNumber: string): Promise<LiveJourneyResult> {
-  liveFetchCount += 1;
-  console.info(`[getLiveJourney] RailRadar fetch #${liveFetchCount} for train ${trainNumber}`);
   if (!env.RAILRADAR_API_KEY) {
     if (allowDevFallback()) {
       const fallback = generateFallbackJourney(trainNumber);
@@ -651,6 +669,15 @@ export async function getLiveJourney(trainNumber: string): Promise<LiveJourneyRe
     }
     return unavailable('RAILRADAR_API_KEY is not configured', 503, 'UNAVAILABLE');
   }
+
+  // live + route geometry ≈ 2 outbound provider calls; reserved before fetch.
+  const budget = await tryConsumeRailRadarBudget(2);
+  if (!budget.ok) {
+    return unavailable(RAILRADAR_BUDGET_EXCEEDED, 429, 'QUOTA_EXCEEDED');
+  }
+
+  liveFetchCount += 1;
+  console.info(`[getLiveJourney] RailRadar fetch #${liveFetchCount} for train ${trainNumber}`);
 
   try {
     const [liveRes, routeGeo] = await Promise.all([

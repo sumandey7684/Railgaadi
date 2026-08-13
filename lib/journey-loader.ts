@@ -1,5 +1,6 @@
 import { getCached, setCached } from '@/lib/cache';
 import { getLiveJourney, LiveJourneyResult } from '@/lib/railradar';
+import { INVALID_TRAIN_ID_ERROR, parseTrainId } from '@/lib/train-id';
 import { DataSource } from '@/types/api';
 import { LiveJourney } from '@/types/train';
 
@@ -36,15 +37,27 @@ function fromCache(cached: CachedLiveJourney): LoadedLiveJourney {
 /**
  * Single server-side journey path used by train, analytics, and terrain routes.
  * Dedupes in-flight RailRadar fetches and reuses the 30s live cache.
+ * Malformed IDs never reach RailRadar.
  */
 export async function loadCachedLiveJourney(trainId: string): Promise<LoadedLiveJourney> {
-  const cacheKey = liveJourneyCacheKey(trainId);
+  const id = parseTrainId(trainId);
+  if (!id) {
+    return {
+      ok: false,
+      dataSource: 'unavailable',
+      error: INVALID_TRAIN_ID_ERROR,
+      status: 400,
+      code: 'UNAVAILABLE',
+    };
+  }
+
+  const cacheKey = liveJourneyCacheKey(id);
   const cached = await getCached<CachedLiveJourney>(cacheKey);
   if (cached) return fromCache(cached);
 
-  let pending = inflight.get(trainId);
+  let pending = inflight.get(id);
   if (!pending) {
-    pending = getLiveJourney(trainId).then(async (result) => {
+    pending = getLiveJourney(id).then(async (result) => {
       if (result.ok) {
         await setCached(
           cacheKey,
@@ -54,8 +67,8 @@ export async function loadCachedLiveJourney(trainId: string): Promise<LoadedLive
       }
       return result;
     });
-    inflight.set(trainId, pending);
-    pending.finally(() => inflight.delete(trainId));
+    inflight.set(id, pending);
+    pending.finally(() => inflight.delete(id));
   }
 
   const result = await pending;

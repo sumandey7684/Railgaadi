@@ -5,13 +5,21 @@ let client: Redis | null | undefined;
 let missingLogged = false;
 let lastFailureLogAt = 0;
 
+function redisCredentials(): { url: string; token: string } | null {
+  const url = (env.UPSTASH_REDIS_REST_URL || '').trim();
+  const token = (env.UPSTASH_REDIS_REST_TOKEN || '').trim();
+  if (!url || !token) return null;
+  return { url, token };
+}
+
 export function isRedisConfigured(): boolean {
-  return Boolean(env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN);
+  return redisCredentials() != null;
 }
 
 /** Shared Upstash REST client, or null when unset / intentionally disabled. */
 export function getRedis(): Redis | null {
-  if (!isRedisConfigured()) {
+  const creds = redisCredentials();
+  if (!creds) {
     if (!missingLogged) {
       missingLogged = true;
       console.warn(
@@ -23,8 +31,8 @@ export function getRedis(): Redis | null {
 
   if (client === undefined) {
     client = new Redis({
-      url: env.UPSTASH_REDIS_REST_URL,
-      token: env.UPSTASH_REDIS_REST_TOKEN,
+      url: creds.url,
+      token: creds.token,
     });
   }
 
