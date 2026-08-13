@@ -5,6 +5,7 @@ import '@/styles/globals.css';
 import QueryProvider from '@/providers/query-provider';
 import { Navbar } from '@/components/layout/Navbar';
 import { BottomNav } from '@/components/layout/BottomNav';
+import { CinematicFooter } from '@/components/ui/motion-footer';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main className="flex-1 px-4 py-6 max-w-7xl mx-auto w-full pb-24 md:pb-6">
             {children}
           </main>
+          <CinematicFooter />
           <Suspense fallback={null}>
             <BottomNav />
           </Suspense>
