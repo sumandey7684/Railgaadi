@@ -85,7 +85,7 @@ interface RRRouteStop {
   status?: string;
 }
 
-interface RRLiveResponse {
+export interface RRLiveResponse {
   trainNumber: string;
   trainName: string;
   startDate: string;
@@ -290,7 +290,8 @@ function interpolatePolyline(coords: [number, number][], pct: number): [number, 
   return interpolateAlongRoute(coords as LngLat[], pct);
 }
 
-function normaliseLiveResponse(raw: RRLiveResponse, routeGeo?: [number, number][]): LiveJourney {
+/** Normalize a RailRadar live payload into the app LiveJourney contract. */
+export function normaliseLiveResponse(raw: RRLiveResponse, routeGeo?: [number, number][]): LiveJourney {
   const train = raw.train;
 
   const stationMap = new Map<string, RRStation>();

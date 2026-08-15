@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Suspense } from 'react';
 import { Inter } from 'next/font/google';
+import Script from 'next/script';
 import '@/styles/globals.css';
 import QueryProvider from '@/providers/query-provider';
 import { ThemeProvider } from '@/providers/theme-provider';
@@ -49,13 +50,16 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      <body className={`${inter.className} min-h-full flex flex-col bg-background text-foreground`}>
+        {/* beforeInteractive keeps FOUC-free theme without a manual <head> that can interfere with Next CSS injection */}
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }}
+        />
         <link rel="preconnect" href="https://api.railradar.in" />
         <link rel="preconnect" href="https://api.maptiler.com" />
         <link rel="preconnect" href="https://api.openweathermap.org" />
-      </head>
-      <body className={`${inter.className} min-h-full flex flex-col bg-background text-foreground`}>
         <ThemeProvider>
           <QueryProvider>
             <Navbar />

@@ -6,9 +6,10 @@ interface CacheEntry<T> {
 }
 
 const memoryCache = new Map<string, CacheEntry<unknown>>();
-const REDIS_CACHE_PREFIX = 'rg:cache:';
+export const REDIS_CACHE_PREFIX = 'rg:cache:';
 
-function redisKey(key: string) {
+/** Redis key for a logical cache key (e.g. live:12951 → rg:cache:live:12951). */
+export function cacheRedisKey(key: string) {
   return `${REDIS_CACHE_PREFIX}${key}`;
 }
 
@@ -29,6 +30,11 @@ function setMemory<T>(key: string, value: T, ttlSeconds: number) {
   });
 }
 
+/** Test-only: clear process-local cache entries. */
+export function resetMemoryCacheForTests() {
+  memoryCache.clear();
+}
+
 /**
  * Shared cache: Redis when configured, with process-local memory fallback.
  * Callers keep the same key names (e.g. live:12951); Redis stores rg:cache:{key}.
@@ -37,7 +43,7 @@ export async function getCached<T>(key: string): Promise<T | null> {
   const redis = getRedis();
   if (redis) {
     try {
-      const value = await redis.get<T>(redisKey(key));
+      const value = await redis.get<T>(cacheRedisKey(key));
       if (value != null) return value;
     } catch (error) {
       logRedisFailure(`get ${key}`, error);
@@ -55,7 +61,7 @@ export async function setCached<T>(key: string, value: T, ttlSeconds: number): P
   if (!redis) return;
 
   try {
-    await redis.set(redisKey(key), value, { ex: ttlSeconds });
+    await redis.set(cacheRedisKey(key), value, { ex: ttlSeconds });
   } catch (error) {
     logRedisFailure(`set ${key}`, error);
   }

@@ -8,9 +8,17 @@ interface Bucket {
 const WINDOW_MS = 60_000;
 const WINDOW_SECONDS = 60;
 const MAX_REQUESTS = 45;
-const REDIS_RATE_PREFIX = 'rg:ratelimit:';
+export const REDIS_RATE_PREFIX = 'rg:ratelimit:';
 
 const buckets = new Map<string, Bucket>();
+
+/** Test-only: clear process-local rate-limit buckets. */
+export function resetRateLimitMemoryForTests() {
+  buckets.clear();
+}
+
+export const RATE_LIMIT_MAX_REQUESTS = MAX_REQUESTS;
+export const RATE_LIMIT_WINDOW_SECONDS = WINDOW_SECONDS;
 
 function prune(now: number) {
   if (buckets.size < 500) return;

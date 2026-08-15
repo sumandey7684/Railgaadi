@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
 import { Target, ZoomIn, ZoomOut } from 'lucide-react';
 import { LiveJourney } from '@/types/train';
 import { useJourneyStore } from '@/store/journey';

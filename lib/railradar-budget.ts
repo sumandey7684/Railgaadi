@@ -10,6 +10,11 @@ interface MemoryBudget {
 
 const memoryBudgets = new Map<string, MemoryBudget>();
 
+/** Test-only: clear process-local budget counters. */
+export function resetRailRadarBudgetMemoryForTests() {
+  memoryBudgets.clear();
+}
+
 function utcDateKey(now = new Date()): string {
   return now.toISOString().slice(0, 10);
 }
@@ -25,7 +30,7 @@ export function budgetTtlSeconds(now = new Date()): number {
 }
 
 export function getRailRadarDailyBudgetLimit(): number {
-  const parsed = Number.parseInt(env.RAILRADAR_DAILY_BUDGET, 10);
+  const parsed = Number.parseInt(process.env.RAILRADAR_DAILY_BUDGET || env.RAILRADAR_DAILY_BUDGET || '50', 10);
   if (Number.isFinite(parsed) && parsed > 0) return parsed;
   return 50;
 }
