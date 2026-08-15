@@ -35,14 +35,29 @@ Tagged release: [`v1.0.0`](https://github.com/sumandey7684/Railgaadi/releases/ta
 
 ## Screenshots
 
-Screenshots are not in the repository. Add files under `docs/screenshots/` and replace the placeholders:
+<p align="center">
+  <img src="docs/screenshots/home.png" alt="RailGaadi home: train search, recent searches, dark liquid-glass UI" width="900" />
+</p>
 
-| Screen | Placeholder |
-| --- | --- |
-| Home search | `![Home](docs/screenshots/home.png)` |
-| Live map + timeline | `![Journey](docs/screenshots/journey.png)` |
-| Weather / analytics tabs | `![Analytics](docs/screenshots/analytics.png)` |
-| Share view | `![Share](docs/screenshots/share.png)` |
+<p align="center"><em>Home — search by number or name, recent trains, theme toggle</em></p>
+
+<p align="center">
+  <img src="docs/screenshots/journey.png" alt="Live map with route polyline, train marker, and station timeline" width="900" />
+</p>
+
+<p align="center"><em>Live map + halt timeline — SCH / ACT / EXP times, delay labels, follow-train</em></p>
+
+<p align="center">
+  <img src="docs/screenshots/weather.png" alt="Weather tab with cached OpenWeather cards for current, next, and destination stations" width="900" />
+</p>
+
+<p align="center"><em>Weather — current, next halt, and destination; data-source badge (cached)</em></p>
+
+<p align="center">
+  <img src="docs/screenshots/analytics.png" alt="Terrain and analytics: elevation profile, delay history, journey stats" width="900" />
+</p>
+
+<p align="center"><em>Terrain & analytics — elevation profile, delay history, distance and delay summary</em></p>
 
 ---
 
