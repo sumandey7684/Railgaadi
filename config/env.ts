@@ -20,4 +20,12 @@ export const env = {
   // Upstash Redis (server-only shared cache + rate limiting)
   UPSTASH_REDIS_REST_URL: (process.env.UPSTASH_REDIS_REST_URL || '').trim(),
   UPSTASH_REDIS_REST_TOKEN: (process.env.UPSTASH_REDIS_REST_TOKEN || '').trim(),
+
+  // Web Push VAPID — server-only. Never prefix PRIVATE with NEXT_PUBLIC_.
+  VAPID_PUBLIC_KEY: (process.env.VAPID_PUBLIC_KEY || '').trim(),
+  VAPID_PRIVATE_KEY: (process.env.VAPID_PRIVATE_KEY || '').trim(),
+  VAPID_SUBJECT: (process.env.VAPID_SUBJECT || '').trim(),
+
+  // Vercel Cron — server-only. Compared to Authorization: Bearer <CRON_SECRET>.
+  CRON_SECRET: (process.env.CRON_SECRET || '').trim(),
 };
